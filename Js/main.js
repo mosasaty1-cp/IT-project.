@@ -1,0 +1,54 @@
+console.log(window);
+console.dir(document);
+
+const layoutSwitcher = document.getElementById('layout-switcher');
+
+function applyLayout(layout) {
+    document.body.classList.remove('layout-horizontal', 'layout-sidebar');
+    document.body.classList.add(`layout-${layout}`);
+    localStorage.setItem('preferredLayout', layout);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const savedLayout = localStorage.getItem('preferredLayout') || 'horizontal';
+    applyLayout(savedLayout);
+    if (layoutSwitcher) layoutSwitcher.value = savedLayout;
+});
+
+if (layoutSwitcher) {
+    layoutSwitcher.addEventListener('change', (e) => {
+        applyLayout(e.target.value);
+    });
+}
+
+//nav bar responsive horizontal layout
+const hamborgur = document.querySelector('.navbar__hamburger');
+const hamborgurICon = document.querySelector('.navbar__hamburger i');
+const dropDownMenu = document.querySelector('.dropdown-menu');
+
+hamborgur.onclick = function () {
+    dropDownMenu.classList.toggle('open')
+    const isOpen = dropDownMenu.classList.contains('open')
+
+    hamborgurICon.classList = isOpen
+        ? 'fa-solid fa-xmark'
+        : 'fa-solid fa-bars'
+}
+
+//uodate navbar 
+
+let user = localStorage.getItem("user");
+if (user) {
+    let parseduser = JSON.parse(user);
+    document.getElementById("logged-in-view").classList.remove("u-hidden");
+    document.getElementById("logged-out-view").classList.add("u-hidden");
+    document.getElementById("user-name-display").innerHTML = `Hello, ${parseduser.username}`;
+}
+
+document.getElementById("nav-logout-btn").addEventListener('click', () => {
+
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+});
+
+
